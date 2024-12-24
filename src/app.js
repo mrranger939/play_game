@@ -24,7 +24,7 @@ const server = app.listen(process.env.PORT || 8000,'0.0.0.0', () => {
 const rooms = {}
 const io = require('socket.io')(server, {
     cors: {
-      origin: 'http://localhost:8000', 
+      origin: process.env.FRONTEND_URL||'http://localhost:8000', 
       methods: ['GET', 'POST'],
       credentials: true,
     },
