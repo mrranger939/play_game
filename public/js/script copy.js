@@ -62,7 +62,7 @@ socket.on('turn', (turn) => {
     } else {
         console.log('Waiting for opponent:', turn);
         isPlayerTurn = false;
-        playername.innerHTML = `<h3>Waiting for your opponent;s move</h3>`;
+        playername.innerHTML = `<h3>Waiting for your opponent's move</h3>`;
         disableButtons();  
     }
 });
