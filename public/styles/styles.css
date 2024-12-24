@@ -1,0 +1,51 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: black;
+    color: white;
+}
+
+.btnnow{
+    width: 32%;
+    padding-top: 32%;
+    margin: 0;
+    background-color: white;
+}
+.ribbon{
+    background-color: white;
+    display: none;
+    color: black;
+    width: 100vw;
+}
+@media (min-width: 700px) {
+    .allbtngroup{
+        margin: 0 25% 0 25%;
+    } 
+}
+.fullscreen-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999; 
+}
+
+.fullscreen-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+.winimages{
+    display: none;
+}
+.btn{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+
+
+
