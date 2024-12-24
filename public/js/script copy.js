@@ -57,34 +57,34 @@ socket.on('turn', (turn) => {
     if (turn === urposition) {
         console.log('Your turn:', turn);
         isPlayerTurn = true;
-        playername.innerHTML = `<h3>${urposition}'s turn</h3>`;
-        enableButtons();  // Enable buttons when it's the player's turn
+        playername.innerHTML = `<h3>Your turn</h3>`;
+        enableButtons();  
     } else {
         console.log('Waiting for opponent:', turn);
         isPlayerTurn = false;
-        playername.innerHTML = `<h3>Waiting for ${turn}</h3>`;
-        disableButtons();  // Disable buttons when it's not the player's turn
+        playername.innerHTML = `<h3>Waiting for your opponent;s move</h3>`;
+        disableButtons();  
     }
 });
 
-// Function to enable buttons
+
 function enableButtons() {
     buttons.forEach(button => {
         button.addEventListener('click', handleButtonClick);
-        button.disabled = false;  // Enable button click
+        button.disabled = false;  
     });
 }
 
 // Function to disable buttons
 function disableButtons() {
     buttons.forEach(button => {
-        button.removeEventListener('click', handleButtonClick);  // Remove the listener
-        button.disabled = true;  // Disable button click
+        button.removeEventListener('click', handleButtonClick);  
+        button.disabled = true; 
     });
 }
 
 function handleButtonClick(event) {
-    if (!isPlayerTurn) return;  // Prevent action if it's not the player's turn
+    if (!isPlayerTurn) return;  
 
     const button = event.target;
     const buttonId = button.getAttribute('data-id');
@@ -113,7 +113,7 @@ socket.on('move', (move)=>{
     // socket.emit('whoTurnMessage', { roomId,  turn: "playerTwo"});
     // playerOne = false;
     // playerTwo = true;
-    playername.innerHTML = `<h3>${playerTwoName}'s turn</h3>`
+    playername.innerHTML = `<h3>Opponent's turn</h3>`
     /* else{
     game[buttonId] = 2;
     

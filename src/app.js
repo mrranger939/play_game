@@ -53,7 +53,7 @@ app.get('/createroom', (req, res) => {
 });
 let waitingPlayers = [];
 io.on('connection', (socket)=>{
-    console.log(`User connected: ${socket.id}`);
+    /* console.log(`User connected: ${socket.id}`); */
 /*     socket.on('joinroom', (roomId)=>{
         if(!rooms[roomId]){
             socket.emit('errorMessage', 'error Message no room found');
@@ -101,15 +101,15 @@ socket.on('joinroom', (roomId) => {
     }
     socket.join(roomId);
     rooms[roomId].clients.push(socket.id);
-    console.log(`Client ${socket.id} joined the room ${roomId}`);
-    console.log("rooms", rooms);
+/*     console.log(`Client ${socket.id} joined the room ${roomId}`);
+    console.log("rooms", rooms); */
 
 
     if (rooms[roomId].clients.length === 2) {
         const [player1, player2] = rooms[roomId].clients;
         io.to(player1).emit('playerRole', { role: 'Player 1', opponent: player2 });
         io.to(player2).emit('playerRole', { role: 'Player 2', opponent: player1 });
-        console.log(`Assigned roles in room ${roomId}: Player 1 - ${player1}, Player 2 - ${player2}`);
+       /*  console.log(`Assigned roles in room ${roomId}: Player 1 - ${player1}, Player 2 - ${player2}`); */
         io.to(player1).emit('turn', 'Player 1');
         return;
     }
@@ -122,8 +122,8 @@ socket.on('joinroom2p', () => {
     
     if (waitingPlayers.length < 2) {
         waitingPlayers.push(socket.id);
-        console.log(`Player ${socket.id} added to waiting queue`);
-        console.log('Waiting players:', waitingPlayers); 
+       /*  console.log(`Player ${socket.id} added to waiting queue`);
+        console.log('Waiting players:', waitingPlayers);  */
 
    
         if (waitingPlayers.length === 1) {
@@ -134,7 +134,7 @@ socket.on('joinroom2p', () => {
         if (waitingPlayers.length === 2) {
           
             const roomId = uuidv4();
-            console.log(`Room created: ${roomId}`);
+            /* console.log(`Room created: ${roomId}`); */
 
 
             io.to(waitingPlayers[0]).emit('roomId', { roomId });
@@ -142,8 +142,8 @@ socket.on('joinroom2p', () => {
 
             io.to(waitingPlayers[0]).emit('startGame', { roomId });
             io.to(waitingPlayers[1]).emit('startGame', { roomId });
-
-            console.log(`Room ${roomId} is ready with 2 players: ${waitingPlayers[0]}, ${waitingPlayers[1]}`);
+/* 
+            console.log(`Room ${roomId} is ready with 2 players: ${waitingPlayers[0]}, ${waitingPlayers[1]}`); */
 
             
             waitingPlayers = [];
@@ -160,7 +160,7 @@ socket.on('joinroom2p', () => {
 /* new chnages code here */
 
     socket.on('move', (details)=>{
-        console.log(details)
+        /* console.log(details) */
         const [player1, player2] = rooms[details.roomId].clients;
         if (details.turn === 'Player 1'){
             io.to(player2).emit('move', details.buttonId);
@@ -184,31 +184,39 @@ socket.on('joinroom2p', () => {
 
         
         delete rooms[roomId];
-        console.log(`Session disconnected for room ${roomId}`);
+        //console.log(`Session disconnected for room ${roomId}`);
     });
 
     
     socket.on('disconnect', () => {
-        console.log(`User disconnected: ${socket.id}`);
-        
+        //console.log(`User disconnected: ${socket.id}`);
+    
+        // Remove the disconnected user from the waiting queue
+        const indexInQueue = waitingPlayers.indexOf(socket.id);
+        if (indexInQueue !== -1) {
+            //console.log(`Removing ${socket.id} from waiting queue`);
+            waitingPlayers.splice(indexInQueue, 1);
+            //console.log('Updated waiting players:', waitingPlayers);
+        }
+    
+        // Check if the user was part of any room and handle cleanup
         for (const roomId in rooms) {
             const room = rooms[roomId];
             const index = room.clients.indexOf(socket.id);
-            
+    
             if (index !== -1) {
-                
-                console.log(`Removing ${socket.id} from room ${roomId}`);
+                //console.log(`Removing ${socket.id} from room ${roomId}`);
                 room.clients.splice(index, 1);
     
-              
                 if (room.clients.length === 0) {
                     delete rooms[roomId];
-                    console.log(`Deleted room ${roomId}`);
+                    //console.log(`Deleted room ${roomId}`);
                 }
                 break;
             }
         }
     });
+    
     
     
 /*     socket.on('roomMessage', ({ roomId, message }) => {
@@ -238,10 +246,10 @@ app.get('/2p', (req, res)=>{
 })
 app.get('/2pr/:id', (req, res) => {
     const roomId = req.params.id;
-    console.log(`Received request for room: ${roomId}`);
+    //console.log(`Received request for room: ${roomId}`);
     if (!rooms[roomId]){
         rooms[roomId] = {clients:[]};
-        console.log(`Room ${roomId} created `);
+        //console.log(`Room ${roomId} created `);
     }
     res.render('2pr', { id: roomId }); 
 

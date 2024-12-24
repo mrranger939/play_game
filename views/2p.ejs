@@ -35,15 +35,39 @@
     } */
 
     function createRoomWithFriend() {
-        fetch('/createroom')
-            .then(response => response.json())
-            .then(data => {
-                const roomLink = `${window.location.origin}/2pr/${data.roomId}`;
-                alert(`Room created! Share this link: ${roomLink}`);
+    fetch('/createroom')
+        .then(response => response.json())
+        .then(data => {
+            const roomLink = `${window.location.origin}/2pr/${data.roomId}`;
+            
+            // Copy the room link to the clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(roomLink)
+                    .then(() => {
+                        alert(`Room created! The link has been copied to your clipboard: ${roomLink}`);
+                        
+                        // Redirect to the room page
+                        window.location.href = roomLink;
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy the link to clipboard:', err);
+                        
+                        // Fallback: Alert with the room link if clipboard fails
+                        alert(`Room created! Copy this link manually: ${roomLink}`);
+                        window.location.href = roomLink;
+                    });
+            } else {
+                // Fallback for unsupported browsers
+                alert(`Room created! Copy this link manually: ${roomLink}`);
                 window.location.href = roomLink;
-            })
-            .catch(err => console.error('Error creating room:', err));
-    }
+            }
+        })
+        .catch(err => {
+            console.error('Error creating room:', err);
+            alert('Failed to create a room. Please try again.');
+        });
+}
+
 </script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
